@@ -302,22 +302,22 @@ func convertErrorToProto(err error) *taskpb.Error {
 			Code:    taskpb.ErrorCode_ERROR_CODE_INTERNAL,
 			Message: err.Error(),
 		}
-	case errors.Is(err, task.ErrFeedbackNotFound):
+	case errors.Is(err, task.ErrUserTaskNotFound):
 		return &taskpb.Error{
 			Code:    taskpb.ErrorCode_ERROR_CODE_NOT_FOUND,
 			Message: err.Error(),
 		}
-	case errors.Is(err, task.ErrFeedbackAlreadyExists):
+	case errors.Is(err, task.ErrUserTaskAlreadyExists):
 		return &taskpb.Error{
 			Code:    taskpb.ErrorCode_ERROR_CODE_ALREADY_EXISTS,
 			Message: err.Error(),
 		}
-	case errors.Is(err, task.ErrFeedbackInvalid):
+	case errors.Is(err, task.ErrUserTaskInvalid):
 		return &taskpb.Error{
 			Code:    taskpb.ErrorCode_ERROR_CODE_VALIDATION,
 			Message: err.Error(),
 		}
-	case errors.Is(err, task.ErrFeedbackInternal):
+	case errors.Is(err, task.ErrUserTaskInternal):
 		return &taskpb.Error{
 			Code:    taskpb.ErrorCode_ERROR_CODE_INTERNAL,
 			Message: err.Error(),

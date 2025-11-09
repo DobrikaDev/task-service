@@ -77,3 +77,38 @@ func (s *TaskService) DeleteTask(ctx context.Context, maxID string) error {
 	}
 	return nil
 }
+
+func (s *TaskService) UserJoinTask(ctx context.Context, userID, taskID string) (*domain.UserTask, error) {
+	userTask := &domain.UserTask{
+		UserID: userID,
+		TaskID: taskID,
+		Status: domain.StatusInProgress,
+	}
+	userTask, err := s.storage.CreateUserTask(ctx, userTask)
+	if err != nil {
+		if errors.Is(err, sql.ErrUserTaskAlreadyExists) {
+			return nil, ErrUserTaskAlreadyExists
+		}
+		if errors.Is(err, sql.ErrUserTaskInvalid) {
+			return nil, ErrTaskNotFound
+		}
+		s.logger.Error("failed to create user task", zap.Error(err), zap.String("user_id", userID), zap.String("task_id", taskID))
+		return nil, ErrTaskInternal
+	}
+	return userTask, nil
+}
+
+func (s *TaskService) UpdateUserTaskStatus(ctx context.Context, userID, taskID string, status domain.Status) (*domain.UserTask, error) {
+	userTask, err := s.storage.UpdateUserTaskStatus(ctx, userID, taskID, status)
+	if err != nil {
+		if errors.Is(err, sql.ErrUserTaskNotFound) {
+			return nil, ErrUserTaskNotFound
+		}
+		if errors.Is(err, sql.ErrUserTaskInvalid) {
+			return nil, ErrTaskNotFound
+		}
+		s.logger.Error("failed to update user task status", zap.Error(err), zap.String("user_id", userID), zap.String("task_id", taskID), zap.Any("status", status))
+		return nil, ErrTaskInternal
+	}
+	return userTask, nil
+}

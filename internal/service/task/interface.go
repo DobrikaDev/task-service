@@ -16,6 +16,9 @@ type storage interface {
 	CreateTask(ctx context.Context, task *domain.Task) (*domain.Task, error)
 	UpdateTask(ctx context.Context, task *domain.Task) (*domain.Task, error)
 	DeleteTask(ctx context.Context, maxID string) error
+
+	CreateUserTask(ctx context.Context, userTask *domain.UserTask) (*domain.UserTask, error)
+	UpdateUserTaskStatus(ctx context.Context, userID, taskID string, status domain.Status) (*domain.UserTask, error)
 }
 
 type TaskService struct {

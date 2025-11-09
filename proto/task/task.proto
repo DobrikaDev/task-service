@@ -10,6 +10,57 @@ service TaskService {
     rpc GetTaskByMaxID(GetTaskByMaxIDRequest) returns (GetTaskByMaxIDResponse);
     rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
     rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+
+    rpc UserJoinTask(UserJoinTaskRequest) returns (UserJoinTaskResponse);
+    rpc UserLeaveTask(UserLeaveTaskRequest) returns (UserLeaveTaskResponse);
+    rpc UserConfirmTask(UserConfirmTaskRequest) returns (UserConfirmTaskResponse);
+    rpc ApproveTask(ApproveTaskRequest) returns (ApproveTaskResponse);
+    rpc RejectTask(RejectTaskRequest) returns (RejectTaskResponse);
+}
+
+message UserJoinTaskRequest {
+    string user_id = 1;
+    string task_id = 2;
+}
+
+message UserJoinTaskResponse {
+    Error error = 1;
+}
+
+message UserLeaveTaskRequest {
+    string user_id = 1;
+    string task_id = 2;
+}
+
+message UserLeaveTaskResponse {
+    Error error = 1;
+}
+
+message UserConfirmTaskRequest {
+    string user_id = 1;
+    string task_id = 2;
+}
+
+message UserConfirmTaskResponse {
+    Error error = 1;
+}
+
+message ApproveTaskRequest {
+    string user_id = 1;
+    string task_id = 2;
+}
+
+message ApproveTaskResponse {
+    Error error = 1;
+}
+
+message RejectTaskRequest {
+    string user_id = 1;
+    string task_id = 2;
+}
+
+message RejectTaskResponse {
+    Error error = 1;
 }
 message Task {
     string id = 1;

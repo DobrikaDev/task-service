@@ -15,6 +15,29 @@ type Task struct {
 	MembersCount     int              `json:"members_count" db:"members_count"`
 	Meta             json.RawMessage  `json:"meta" db:"meta"`
 
-	CreatedAt        time.Time        `json:"created_at" db:"created_at"`
-	UpdatedAt        time.Time        `json:"updated_at" db:"updated_at"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+}
+
+type UserTask struct {
+	UserID string `json:"user_id" db:"user_id"`
+	TaskID string `json:"task_id" db:"task_id"`
+	Status Status `json:"status" db:"status"`
+
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+}
+
+type Status string
+
+const (
+	StatusInProgress Status = "pending"
+	StatusCompleted  Status = "completed"
+	StatusApproved   Status = "approved"
+	StatusRejected   Status = "rejected"
+	StatusCancelled  Status = "cancelled"
+)
+
+func (s Status) String() string {
+	return string(s)
 }

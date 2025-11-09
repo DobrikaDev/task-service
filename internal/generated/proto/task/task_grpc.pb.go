@@ -19,11 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TaskService_CreateTask_FullMethodName     = "/task.TaskService/CreateTask"
-	TaskService_GetTasks_FullMethodName       = "/task.TaskService/GetTasks"
-	TaskService_GetTaskByMaxID_FullMethodName = "/task.TaskService/GetTaskByMaxID"
-	TaskService_UpdateTask_FullMethodName     = "/task.TaskService/UpdateTask"
-	TaskService_DeleteTask_FullMethodName     = "/task.TaskService/DeleteTask"
+	TaskService_CreateTask_FullMethodName      = "/task.TaskService/CreateTask"
+	TaskService_GetTasks_FullMethodName        = "/task.TaskService/GetTasks"
+	TaskService_GetTaskByMaxID_FullMethodName  = "/task.TaskService/GetTaskByMaxID"
+	TaskService_UpdateTask_FullMethodName      = "/task.TaskService/UpdateTask"
+	TaskService_DeleteTask_FullMethodName      = "/task.TaskService/DeleteTask"
+	TaskService_UserJoinTask_FullMethodName    = "/task.TaskService/UserJoinTask"
+	TaskService_UserLeaveTask_FullMethodName   = "/task.TaskService/UserLeaveTask"
+	TaskService_UserConfirmTask_FullMethodName = "/task.TaskService/UserConfirmTask"
+	TaskService_ApproveTask_FullMethodName     = "/task.TaskService/ApproveTask"
+	TaskService_RejectTask_FullMethodName      = "/task.TaskService/RejectTask"
 )
 
 // TaskServiceClient is the client API for TaskService service.
@@ -35,6 +40,11 @@ type TaskServiceClient interface {
 	GetTaskByMaxID(ctx context.Context, in *GetTaskByMaxIDRequest, opts ...grpc.CallOption) (*GetTaskByMaxIDResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
+	UserJoinTask(ctx context.Context, in *UserJoinTaskRequest, opts ...grpc.CallOption) (*UserJoinTaskResponse, error)
+	UserLeaveTask(ctx context.Context, in *UserLeaveTaskRequest, opts ...grpc.CallOption) (*UserLeaveTaskResponse, error)
+	UserConfirmTask(ctx context.Context, in *UserConfirmTaskRequest, opts ...grpc.CallOption) (*UserConfirmTaskResponse, error)
+	ApproveTask(ctx context.Context, in *ApproveTaskRequest, opts ...grpc.CallOption) (*ApproveTaskResponse, error)
+	RejectTask(ctx context.Context, in *RejectTaskRequest, opts ...grpc.CallOption) (*RejectTaskResponse, error)
 }
 
 type taskServiceClient struct {
@@ -95,6 +105,56 @@ func (c *taskServiceClient) DeleteTask(ctx context.Context, in *DeleteTaskReques
 	return out, nil
 }
 
+func (c *taskServiceClient) UserJoinTask(ctx context.Context, in *UserJoinTaskRequest, opts ...grpc.CallOption) (*UserJoinTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserJoinTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UserJoinTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) UserLeaveTask(ctx context.Context, in *UserLeaveTaskRequest, opts ...grpc.CallOption) (*UserLeaveTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserLeaveTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UserLeaveTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) UserConfirmTask(ctx context.Context, in *UserConfirmTaskRequest, opts ...grpc.CallOption) (*UserConfirmTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserConfirmTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_UserConfirmTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) ApproveTask(ctx context.Context, in *ApproveTaskRequest, opts ...grpc.CallOption) (*ApproveTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApproveTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_ApproveTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *taskServiceClient) RejectTask(ctx context.Context, in *RejectTaskRequest, opts ...grpc.CallOption) (*RejectTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RejectTaskResponse)
+	err := c.cc.Invoke(ctx, TaskService_RejectTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskServiceServer is the server API for TaskService service.
 // All implementations must embed UnimplementedTaskServiceServer
 // for forward compatibility.
@@ -104,6 +164,11 @@ type TaskServiceServer interface {
 	GetTaskByMaxID(context.Context, *GetTaskByMaxIDRequest) (*GetTaskByMaxIDResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
+	UserJoinTask(context.Context, *UserJoinTaskRequest) (*UserJoinTaskResponse, error)
+	UserLeaveTask(context.Context, *UserLeaveTaskRequest) (*UserLeaveTaskResponse, error)
+	UserConfirmTask(context.Context, *UserConfirmTaskRequest) (*UserConfirmTaskResponse, error)
+	ApproveTask(context.Context, *ApproveTaskRequest) (*ApproveTaskResponse, error)
+	RejectTask(context.Context, *RejectTaskRequest) (*RejectTaskResponse, error)
 	mustEmbedUnimplementedTaskServiceServer()
 }
 
@@ -128,6 +193,21 @@ func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskReq
 }
 func (UnimplementedTaskServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UserJoinTask(context.Context, *UserJoinTaskRequest) (*UserJoinTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserJoinTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UserLeaveTask(context.Context, *UserLeaveTaskRequest) (*UserLeaveTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserLeaveTask not implemented")
+}
+func (UnimplementedTaskServiceServer) UserConfirmTask(context.Context, *UserConfirmTaskRequest) (*UserConfirmTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserConfirmTask not implemented")
+}
+func (UnimplementedTaskServiceServer) ApproveTask(context.Context, *ApproveTaskRequest) (*ApproveTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApproveTask not implemented")
+}
+func (UnimplementedTaskServiceServer) RejectTask(context.Context, *RejectTaskRequest) (*RejectTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RejectTask not implemented")
 }
 func (UnimplementedTaskServiceServer) mustEmbedUnimplementedTaskServiceServer() {}
 func (UnimplementedTaskServiceServer) testEmbeddedByValue()                     {}
@@ -240,6 +320,96 @@ func _TaskService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskService_UserJoinTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserJoinTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UserJoinTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UserJoinTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UserJoinTask(ctx, req.(*UserJoinTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_UserLeaveTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLeaveTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UserLeaveTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UserLeaveTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UserLeaveTask(ctx, req.(*UserLeaveTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_UserConfirmTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserConfirmTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).UserConfirmTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_UserConfirmTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).UserConfirmTask(ctx, req.(*UserConfirmTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_ApproveTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApproveTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).ApproveTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_ApproveTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).ApproveTask(ctx, req.(*ApproveTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TaskService_RejectTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RejectTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskServiceServer).RejectTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskService_RejectTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskServiceServer).RejectTask(ctx, req.(*RejectTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskService_ServiceDesc is the grpc.ServiceDesc for TaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +436,26 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteTask",
 			Handler:    _TaskService_DeleteTask_Handler,
+		},
+		{
+			MethodName: "UserJoinTask",
+			Handler:    _TaskService_UserJoinTask_Handler,
+		},
+		{
+			MethodName: "UserLeaveTask",
+			Handler:    _TaskService_UserLeaveTask_Handler,
+		},
+		{
+			MethodName: "UserConfirmTask",
+			Handler:    _TaskService_UserConfirmTask_Handler,
+		},
+		{
+			MethodName: "ApproveTask",
+			Handler:    _TaskService_ApproveTask_Handler,
+		},
+		{
+			MethodName: "RejectTask",
+			Handler:    _TaskService_RejectTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
