@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: task-service-config
+  namespace: default
+data:
+  config.yaml: |
+    port: 8083
+    sql:
+      host: postgres.default.svc.cluster.local
+      port: 5432
+      user: postgres
+      password: postgres
+      name: postgres
+
