@@ -1,10 +1,13 @@
 package task
 
 import (
-	"DobrikaDev/task-service/internal/domain"
-	"DobrikaDev/task-service/internal/storage/sql"
 	"context"
 	"errors"
+	"strings"
+
+	"DobrikaDev/task-service/internal/domain"
+	searchintegration "DobrikaDev/task-service/internal/integration/search"
+	"DobrikaDev/task-service/internal/storage/sql"
 
 	"go.uber.org/zap"
 )
@@ -51,6 +54,9 @@ func (s *TaskService) CreateTask(ctx context.Context, task *domain.Task) (*domai
 		s.logger.Error("failed to create task", zap.Error(err), zap.Any("task", task))
 		return nil, ErrTaskInternal
 	}
+	if s.indexer != nil {
+		s.indexer.NotifyTaskChanged(task.ID)
+	}
 	return task, nil
 }
 
@@ -63,7 +69,64 @@ func (s *TaskService) UpdateTask(ctx context.Context, task *domain.Task) (*domai
 		s.logger.Error("failed to update task", zap.Error(err), zap.Any("task", task))
 		return nil, ErrTaskInternal
 	}
+	if s.indexer != nil {
+		s.indexer.NotifyTaskChanged(task.ID)
+	}
 	return task, nil
+}
+
+func (s *TaskService) SearchTasks(ctx context.Context, opts SearchOptions) ([]*domain.Task, error) {
+	if strings.TrimSpace(opts.Query) == "" {
+		return nil, ErrTaskInvalid
+	}
+	if s.search == nil {
+		return nil, ErrTaskSearchUnavailable
+	}
+
+	req := searchintegration.SearchRequest{
+		UserQuery: strings.TrimSpace(opts.Query),
+		GeoData:   strings.TrimSpace(opts.GeoData),
+		QueryType: strings.TrimSpace(opts.QueryType),
+		UserTags:  make([]string, 0, len(opts.Tags)),
+	}
+
+	for _, tag := range opts.Tags {
+		tag = strings.TrimSpace(tag)
+		if tag != "" {
+			req.UserTags = append(req.UserTags, tag)
+		}
+	}
+
+	resp, err := s.search.Search(ctx, req)
+	if err != nil {
+		s.logger.Error("search request failed", zap.Error(err), zap.String("query", req.UserQuery))
+		return nil, ErrTaskInternal
+	}
+
+	if resp == nil || len(resp.TaskIDs) == 0 {
+		return []*domain.Task{}, nil
+	}
+
+	tasks, err := s.storage.GetTasksByIDs(ctx, resp.TaskIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	taskByID := make(map[string]*domain.Task, len(tasks))
+	for _, task := range tasks {
+		if task != nil && task.ID != "" {
+			taskByID[task.ID] = task
+		}
+	}
+
+	result := make([]*domain.Task, 0, len(resp.TaskIDs))
+	for _, id := range resp.TaskIDs {
+		if task, ok := taskByID[id]; ok {
+			result = append(result, task)
+		}
+	}
+
+	return result, nil
 }
 
 func (s *TaskService) DeleteTask(ctx context.Context, id string) error {

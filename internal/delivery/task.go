@@ -1,12 +1,14 @@
 package delivery
 
 import (
-	"DobrikaDev/task-service/internal/domain"
-	taskpb "DobrikaDev/task-service/internal/generated/proto/task"
-	"DobrikaDev/task-service/internal/service/task"
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
+
+	"DobrikaDev/task-service/internal/domain"
+	taskpb "DobrikaDev/task-service/internal/generated/proto/task"
+	"DobrikaDev/task-service/internal/service/task"
 
 	"github.com/dr3dnought/gospadi"
 	"go.uber.org/zap"
@@ -78,6 +80,31 @@ func (s *Server) GetTasks(ctx context.Context, req *taskpb.GetTasksRequest) (*ta
 	return &taskpb.GetTasksResponse{
 		Tasks: gospadi.Map(tasks, convertTaskToProto),
 		Total: int32(count),
+	}, nil
+}
+
+func (s *Server) SearchTasks(ctx context.Context, req *taskpb.SearchTasksRequest) (*taskpb.SearchTasksResponse, error) {
+	query := strings.TrimSpace(req.GetQuery())
+	if query == "" {
+		return &taskpb.SearchTasksResponse{
+			Error: validationError("query is required"),
+		}, nil
+	}
+
+	tasks, err := s.taskService.SearchTasks(ctx, task.SearchOptions{
+		Query:     query,
+		QueryType: strings.TrimSpace(req.GetQueryType()),
+		GeoData:   strings.TrimSpace(req.GetGeoData()),
+		Tags:      req.GetTags(),
+	})
+	if err != nil {
+		return &taskpb.SearchTasksResponse{
+			Error: convertErrorToProto(err),
+		}, nil
+	}
+
+	return &taskpb.SearchTasksResponse{
+		Tasks: gospadi.Map(tasks, convertTaskToProto),
 	}, nil
 }
 
@@ -292,6 +319,11 @@ func convertErrorToProto(err error) *taskpb.Error {
 			Message: err.Error(),
 		}
 	case errors.Is(err, task.ErrTaskInternal):
+		return &taskpb.Error{
+			Code:    taskpb.ErrorCode_ERROR_CODE_INTERNAL,
+			Message: err.Error(),
+		}
+	case errors.Is(err, task.ErrTaskSearchUnavailable):
 		return &taskpb.Error{
 			Code:    taskpb.ErrorCode_ERROR_CODE_INTERNAL,
 			Message: err.Error(),

@@ -6,6 +6,7 @@ var ErrTaskNotFound = errors.New("task not found")
 var ErrTaskAlreadyExists = errors.New("task already exists")
 var ErrTaskInternal = errors.New("task internal error")
 var ErrTaskInvalid = errors.New("task invalid")
+var ErrTaskSearchUnavailable = errors.New("task search unavailable")
 
 var ErrUserTaskAlreadyExists = errors.New("user task already exists")
 var ErrUserTaskInternal = errors.New("user task internal error")

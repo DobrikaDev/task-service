@@ -12,4 +12,11 @@ data:
       user: postgres
       password: postgres
       name: postgres
+    search:
+      base_url: http://dobrika-search.default.svc.cluster.local:8080
+      index_timeout: 3s
+      search_timeout: 2s
+      scheduler_interval: 30s
+      scheduler_batch_size: 200
+      scheduler_max_retries: 3
 

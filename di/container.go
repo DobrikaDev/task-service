@@ -1,14 +1,17 @@
 package di
 
 import (
+	"context"
+	"net"
+	"net/http"
+
 	"DobrikaDev/task-service/internal/delivery"
+	searchintegration "DobrikaDev/task-service/internal/integration/search"
+	"DobrikaDev/task-service/internal/jobs/indexer"
 	"DobrikaDev/task-service/internal/service/task"
 	"DobrikaDev/task-service/internal/storage/sql"
 	"DobrikaDev/task-service/internal/storage/sqlxtrm"
 	"DobrikaDev/task-service/utils/config"
-	"context"
-	"net"
-	"net/http"
 
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
@@ -29,6 +32,8 @@ type Container struct {
 	storage            *sql.SqlStorage
 	netListener        *net.Listener
 	grpcServer         *grpc.Server
+	searchClient       *searchintegration.Client
+	taskIndexer        *indexer.Scheduler
 }
 
 func NewContainer(ctx context.Context, cfg *config.Config, logger *zap.Logger) *Container {
@@ -37,7 +42,7 @@ func NewContainer(ctx context.Context, cfg *config.Config, logger *zap.Logger) *
 
 func (c *Container) GetTaskService() *task.TaskService {
 	return get(&c.taskService, func() *task.TaskService {
-		return task.NewTaskService(c.GetStorage(), c.cfg, c.logger)
+		return task.NewTaskService(c.GetStorage(), c.cfg, c.logger, c.GetTaskIndexer(), c.GetSearchClient())
 	})
 }
 
@@ -97,6 +102,29 @@ func (c *Container) GetGRPCServer() *grpc.Server {
 func (c *Container) GetRpcServer() *delivery.Server {
 	return get(&c.server, func() *delivery.Server {
 		return delivery.NewServer(c.ctx, c.GetTaskService(), c.cfg, c.logger)
+	})
+}
+
+func (c *Container) GetSearchClient() *searchintegration.Client {
+	return get(&c.searchClient, func() *searchintegration.Client {
+		client, err := searchintegration.New(c.cfg.Search, c.GetHTTPClient(), searchintegration.WithLogger(c.logger))
+		if err != nil {
+			c.logger.Error("failed to create search client", zap.Error(err))
+			return nil
+		}
+		return client
+	})
+}
+
+func (c *Container) GetTaskIndexer() *indexer.Scheduler {
+	return get(&c.taskIndexer, func() *indexer.Scheduler {
+		client := c.GetSearchClient()
+		if client == nil {
+			return nil
+		}
+		scheduler := indexer.NewScheduler(c.GetStorage(), client, c.cfg.Search, c.logger)
+		scheduler.Start(c.ctx)
+		return scheduler
 	})
 }
 
