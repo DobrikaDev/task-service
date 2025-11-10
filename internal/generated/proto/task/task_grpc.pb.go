@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	TaskService_CreateTask_FullMethodName      = "/task.TaskService/CreateTask"
 	TaskService_GetTasks_FullMethodName        = "/task.TaskService/GetTasks"
-	TaskService_GetTaskByMaxID_FullMethodName  = "/task.TaskService/GetTaskByMaxID"
+	TaskService_GetTaskByID_FullMethodName     = "/task.TaskService/GetTaskByID"
 	TaskService_UpdateTask_FullMethodName      = "/task.TaskService/UpdateTask"
 	TaskService_DeleteTask_FullMethodName      = "/task.TaskService/DeleteTask"
 	TaskService_UserJoinTask_FullMethodName    = "/task.TaskService/UserJoinTask"
@@ -37,7 +37,7 @@ const (
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	GetTasks(ctx context.Context, in *GetTasksRequest, opts ...grpc.CallOption) (*GetTasksResponse, error)
-	GetTaskByMaxID(ctx context.Context, in *GetTaskByMaxIDRequest, opts ...grpc.CallOption) (*GetTaskByMaxIDResponse, error)
+	GetTaskByID(ctx context.Context, in *GetTaskByIDRequest, opts ...grpc.CallOption) (*GetTaskByIDResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
 	UserJoinTask(ctx context.Context, in *UserJoinTaskRequest, opts ...grpc.CallOption) (*UserJoinTaskResponse, error)
@@ -75,10 +75,10 @@ func (c *taskServiceClient) GetTasks(ctx context.Context, in *GetTasksRequest, o
 	return out, nil
 }
 
-func (c *taskServiceClient) GetTaskByMaxID(ctx context.Context, in *GetTaskByMaxIDRequest, opts ...grpc.CallOption) (*GetTaskByMaxIDResponse, error) {
+func (c *taskServiceClient) GetTaskByID(ctx context.Context, in *GetTaskByIDRequest, opts ...grpc.CallOption) (*GetTaskByIDResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetTaskByMaxIDResponse)
-	err := c.cc.Invoke(ctx, TaskService_GetTaskByMaxID_FullMethodName, in, out, cOpts...)
+	out := new(GetTaskByIDResponse)
+	err := c.cc.Invoke(ctx, TaskService_GetTaskByID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func (c *taskServiceClient) RejectTask(ctx context.Context, in *RejectTaskReques
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error)
-	GetTaskByMaxID(context.Context, *GetTaskByMaxIDRequest) (*GetTaskByMaxIDResponse, error)
+	GetTaskByID(context.Context, *GetTaskByIDRequest) (*GetTaskByIDResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
 	UserJoinTask(context.Context, *UserJoinTaskRequest) (*UserJoinTaskResponse, error)
@@ -185,8 +185,8 @@ func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskReq
 func (UnimplementedTaskServiceServer) GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
 }
-func (UnimplementedTaskServiceServer) GetTaskByMaxID(context.Context, *GetTaskByMaxIDRequest) (*GetTaskByMaxIDResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTaskByMaxID not implemented")
+func (UnimplementedTaskServiceServer) GetTaskByID(context.Context, *GetTaskByIDRequest) (*GetTaskByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskByID not implemented")
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
@@ -266,20 +266,20 @@ func _TaskService_GetTasks_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskService_GetTaskByMaxID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTaskByMaxIDRequest)
+func _TaskService_GetTaskByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTaskByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskServiceServer).GetTaskByMaxID(ctx, in)
+		return srv.(TaskServiceServer).GetTaskByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TaskService_GetTaskByMaxID_FullMethodName,
+		FullMethod: TaskService_GetTaskByID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).GetTaskByMaxID(ctx, req.(*GetTaskByMaxIDRequest))
+		return srv.(TaskServiceServer).GetTaskByID(ctx, req.(*GetTaskByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -426,8 +426,8 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_GetTasks_Handler,
 		},
 		{
-			MethodName: "GetTaskByMaxID",
-			Handler:    _TaskService_GetTaskByMaxID_Handler,
+			MethodName: "GetTaskByID",
+			Handler:    _TaskService_GetTaskByID_Handler,
 		},
 		{
 			MethodName: "UpdateTask",

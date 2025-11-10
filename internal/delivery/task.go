@@ -72,7 +72,7 @@ func (s *Server) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest) 
 }
 
 func (s *Server) GetTasks(ctx context.Context, req *taskpb.GetTasksRequest) (*taskpb.GetTasksResponse, error) {
-	tasks, count, err := s.taskService.GetTasks(ctx, req.GetMaxId(), int(req.GetLimit()), int(req.GetOffset()))
+	tasks, count, err := s.taskService.GetTasks(ctx, req.GetCustomerId(), int(req.GetLimit()), int(req.GetOffset()))
 	if err != nil {
 		return &taskpb.GetTasksResponse{
 			Error: convertErrorToProto(err),
@@ -87,23 +87,23 @@ func (s *Server) GetTasks(ctx context.Context, req *taskpb.GetTasksRequest) (*ta
 	}, nil
 }
 
-func (s *Server) GetTaskByMaxID(ctx context.Context, req *taskpb.GetTaskByMaxIDRequest) (*taskpb.GetTaskByMaxIDResponse, error) {
-	if req.GetMaxId() == "" {
-		return &taskpb.GetTaskByMaxIDResponse{
-			Error: validationError("max id is required"),
+func (s *Server) GetTaskByID(ctx context.Context, req *taskpb.GetTaskByIDRequest) (*taskpb.GetTaskByIDResponse, error) {
+	if req.GetId() == "" {
+		return &taskpb.GetTaskByIDResponse{
+			Error: validationError("id is required"),
 		}, nil
 	}
 
-	task, err := s.taskService.GetTaskByMaxID(ctx, req.GetMaxId())
+	task, err := s.taskService.GetTaskByID(ctx, req.GetId())
 	if err != nil {
-		return &taskpb.GetTaskByMaxIDResponse{
+		return &taskpb.GetTaskByIDResponse{
 			Error: convertErrorToProto(err),
 		}, nil
 	}
 
 	s.logger.Info("task fetched", zap.Any("task", task))
 
-	return &taskpb.GetTaskByMaxIDResponse{
+	return &taskpb.GetTaskByIDResponse{
 		Task: convertTaskToProto(task),
 	}, nil
 }

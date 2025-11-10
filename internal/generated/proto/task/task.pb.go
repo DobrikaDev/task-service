@@ -822,7 +822,7 @@ func (x *CreateTaskRequest) GetTask() *Task {
 
 type GetTasksRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MaxId         string                 `protobuf:"bytes,1,opt,name=max_id,json=maxId,proto3" json:"max_id,omitempty"`
+	CustomerId    string                 `protobuf:"bytes,1,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
 	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,3,opt,name=offset,proto3" json:"offset,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -859,9 +859,9 @@ func (*GetTasksRequest) Descriptor() ([]byte, []int) {
 	return file_proto_task_task_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *GetTasksRequest) GetMaxId() string {
+func (x *GetTasksRequest) GetCustomerId() string {
 	if x != nil {
-		return x.MaxId
+		return x.CustomerId
 	}
 	return ""
 }
@@ -940,27 +940,27 @@ func (x *GetTasksResponse) GetError() *Error {
 	return nil
 }
 
-type GetTaskByMaxIDRequest struct {
+type GetTaskByIDRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MaxId         string                 `protobuf:"bytes,1,opt,name=max_id,json=maxId,proto3" json:"max_id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetTaskByMaxIDRequest) Reset() {
-	*x = GetTaskByMaxIDRequest{}
+func (x *GetTaskByIDRequest) Reset() {
+	*x = GetTaskByIDRequest{}
 	mi := &file_proto_task_task_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetTaskByMaxIDRequest) String() string {
+func (x *GetTaskByIDRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetTaskByMaxIDRequest) ProtoMessage() {}
+func (*GetTaskByIDRequest) ProtoMessage() {}
 
-func (x *GetTaskByMaxIDRequest) ProtoReflect() protoreflect.Message {
+func (x *GetTaskByIDRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_task_task_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -972,19 +972,19 @@ func (x *GetTaskByMaxIDRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetTaskByMaxIDRequest.ProtoReflect.Descriptor instead.
-func (*GetTaskByMaxIDRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetTaskByIDRequest.ProtoReflect.Descriptor instead.
+func (*GetTaskByIDRequest) Descriptor() ([]byte, []int) {
 	return file_proto_task_task_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *GetTaskByMaxIDRequest) GetMaxId() string {
+func (x *GetTaskByIDRequest) GetId() string {
 	if x != nil {
-		return x.MaxId
+		return x.Id
 	}
 	return ""
 }
 
-type GetTaskByMaxIDResponse struct {
+type GetTaskByIDResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Task          *Task                  `protobuf:"bytes,1,opt,name=Task,proto3" json:"Task,omitempty"`
 	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
@@ -992,20 +992,20 @@ type GetTaskByMaxIDResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetTaskByMaxIDResponse) Reset() {
-	*x = GetTaskByMaxIDResponse{}
+func (x *GetTaskByIDResponse) Reset() {
+	*x = GetTaskByIDResponse{}
 	mi := &file_proto_task_task_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetTaskByMaxIDResponse) String() string {
+func (x *GetTaskByIDResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetTaskByMaxIDResponse) ProtoMessage() {}
+func (*GetTaskByIDResponse) ProtoMessage() {}
 
-func (x *GetTaskByMaxIDResponse) ProtoReflect() protoreflect.Message {
+func (x *GetTaskByIDResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_task_task_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1017,19 +1017,19 @@ func (x *GetTaskByMaxIDResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetTaskByMaxIDResponse.ProtoReflect.Descriptor instead.
-func (*GetTaskByMaxIDResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetTaskByIDResponse.ProtoReflect.Descriptor instead.
+func (*GetTaskByIDResponse) Descriptor() ([]byte, []int) {
 	return file_proto_task_task_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *GetTaskByMaxIDResponse) GetTask() *Task {
+func (x *GetTaskByIDResponse) GetTask() *Task {
 	if x != nil {
 		return x.Task
 	}
 	return nil
 }
 
-func (x *GetTaskByMaxIDResponse) GetError() *Error {
+func (x *GetTaskByIDResponse) GetError() *Error {
 	if x != nil {
 		return x.Error
 	}
@@ -1383,19 +1383,20 @@ const file_proto_task_task_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"3\n" +
 	"\x11CreateTaskRequest\x12\x1e\n" +
 	"\x04Task\x18\x01 \x01(\v2\n" +
-	".task.TaskR\x04Task\"V\n" +
-	"\x0fGetTasksRequest\x12\x15\n" +
-	"\x06max_id\x18\x01 \x01(\tR\x05maxId\x12\x14\n" +
+	".task.TaskR\x04Task\"`\n" +
+	"\x0fGetTasksRequest\x12\x1f\n" +
+	"\vcustomer_id\x18\x01 \x01(\tR\n" +
+	"customerId\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x03 \x01(\x05R\x06offset\"m\n" +
 	"\x10GetTasksResponse\x12 \n" +
 	"\x05Tasks\x18\x01 \x03(\v2\n" +
 	".task.TaskR\x05Tasks\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\x12!\n" +
-	"\x05error\x18\x03 \x01(\v2\v.task.ErrorR\x05error\".\n" +
-	"\x15GetTaskByMaxIDRequest\x12\x15\n" +
-	"\x06max_id\x18\x01 \x01(\tR\x05maxId\"[\n" +
-	"\x16GetTaskByMaxIDResponse\x12\x1e\n" +
+	"\x05error\x18\x03 \x01(\v2\v.task.ErrorR\x05error\"$\n" +
+	"\x12GetTaskByIDRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"X\n" +
+	"\x13GetTaskByIDResponse\x12\x1e\n" +
 	"\x04Task\x18\x01 \x01(\v2\n" +
 	".task.TaskR\x04Task\x12!\n" +
 	"\x05error\x18\x02 \x01(\v2\v.task.ErrorR\x05error\"3\n" +
@@ -1428,12 +1429,12 @@ const file_proto_task_task_proto_rawDesc = "" +
 	"\x15ERROR_CODE_VALIDATION\x10\x01\x12\x18\n" +
 	"\x14ERROR_CODE_NOT_FOUND\x10\x02\x12\x17\n" +
 	"\x13ERROR_CODE_INTERNAL\x10\x03\x12\x1d\n" +
-	"\x19ERROR_CODE_ALREADY_EXISTS\x10\x042\xbe\x05\n" +
+	"\x19ERROR_CODE_ALREADY_EXISTS\x10\x042\xb5\x05\n" +
 	"\vTaskService\x12?\n" +
 	"\n" +
 	"CreateTask\x12\x17.task.CreateTaskRequest\x1a\x18.task.CreateTaskResponse\x129\n" +
-	"\bGetTasks\x12\x15.task.GetTasksRequest\x1a\x16.task.GetTasksResponse\x12K\n" +
-	"\x0eGetTaskByMaxID\x12\x1b.task.GetTaskByMaxIDRequest\x1a\x1c.task.GetTaskByMaxIDResponse\x12?\n" +
+	"\bGetTasks\x12\x15.task.GetTasksRequest\x1a\x16.task.GetTasksResponse\x12B\n" +
+	"\vGetTaskByID\x12\x18.task.GetTaskByIDRequest\x1a\x19.task.GetTaskByIDResponse\x12?\n" +
 	"\n" +
 	"UpdateTask\x12\x17.task.UpdateTaskRequest\x1a\x18.task.UpdateTaskResponse\x12?\n" +
 	"\n" +
@@ -1477,8 +1478,8 @@ var file_proto_task_task_proto_goTypes = []any{
 	(*CreateTaskRequest)(nil),       // 14: task.CreateTaskRequest
 	(*GetTasksRequest)(nil),         // 15: task.GetTasksRequest
 	(*GetTasksResponse)(nil),        // 16: task.GetTasksResponse
-	(*GetTaskByMaxIDRequest)(nil),   // 17: task.GetTaskByMaxIDRequest
-	(*GetTaskByMaxIDResponse)(nil),  // 18: task.GetTaskByMaxIDResponse
+	(*GetTaskByIDRequest)(nil),      // 17: task.GetTaskByIDRequest
+	(*GetTaskByIDResponse)(nil),     // 18: task.GetTaskByIDResponse
 	(*UpdateTaskRequest)(nil),       // 19: task.UpdateTaskRequest
 	(*UpdateTaskResponse)(nil),      // 20: task.UpdateTaskResponse
 	(*DeleteTaskRequest)(nil),       // 21: task.DeleteTaskRequest
@@ -1497,8 +1498,8 @@ var file_proto_task_task_proto_depIdxs = []int32{
 	12, // 7: task.CreateTaskRequest.Task:type_name -> task.Task
 	12, // 8: task.GetTasksResponse.Tasks:type_name -> task.Task
 	24, // 9: task.GetTasksResponse.error:type_name -> task.Error
-	12, // 10: task.GetTaskByMaxIDResponse.Task:type_name -> task.Task
-	24, // 11: task.GetTaskByMaxIDResponse.error:type_name -> task.Error
+	12, // 10: task.GetTaskByIDResponse.Task:type_name -> task.Task
+	24, // 11: task.GetTaskByIDResponse.error:type_name -> task.Error
 	12, // 12: task.UpdateTaskRequest.Task:type_name -> task.Task
 	12, // 13: task.UpdateTaskResponse.Task:type_name -> task.Task
 	24, // 14: task.UpdateTaskResponse.error:type_name -> task.Error
@@ -1508,7 +1509,7 @@ var file_proto_task_task_proto_depIdxs = []int32{
 	1,  // 18: task.Error.code:type_name -> task.ErrorCode
 	14, // 19: task.TaskService.CreateTask:input_type -> task.CreateTaskRequest
 	15, // 20: task.TaskService.GetTasks:input_type -> task.GetTasksRequest
-	17, // 21: task.TaskService.GetTaskByMaxID:input_type -> task.GetTaskByMaxIDRequest
+	17, // 21: task.TaskService.GetTaskByID:input_type -> task.GetTaskByIDRequest
 	19, // 22: task.TaskService.UpdateTask:input_type -> task.UpdateTaskRequest
 	21, // 23: task.TaskService.DeleteTask:input_type -> task.DeleteTaskRequest
 	2,  // 24: task.TaskService.UserJoinTask:input_type -> task.UserJoinTaskRequest
@@ -1518,7 +1519,7 @@ var file_proto_task_task_proto_depIdxs = []int32{
 	10, // 28: task.TaskService.RejectTask:input_type -> task.RejectTaskRequest
 	23, // 29: task.TaskService.CreateTask:output_type -> task.CreateTaskResponse
 	16, // 30: task.TaskService.GetTasks:output_type -> task.GetTasksResponse
-	18, // 31: task.TaskService.GetTaskByMaxID:output_type -> task.GetTaskByMaxIDResponse
+	18, // 31: task.TaskService.GetTaskByID:output_type -> task.GetTaskByIDResponse
 	20, // 32: task.TaskService.UpdateTask:output_type -> task.UpdateTaskResponse
 	22, // 33: task.TaskService.DeleteTask:output_type -> task.DeleteTaskResponse
 	3,  // 34: task.TaskService.UserJoinTask:output_type -> task.UserJoinTaskResponse

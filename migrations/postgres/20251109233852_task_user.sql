@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS user_tasks (
-    user_id VARCHAR(255) NOT NULL REFERENCES users(id),
+    user_id VARCHAR(255) NOT NULL REFERENCES users(max_id),
     task_id VARCHAR(255) NOT NULL REFERENCES tasks(id),
     status VARCHAR(255) NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

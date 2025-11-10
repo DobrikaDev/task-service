@@ -10,7 +10,7 @@ import (
 )
 
 type storage interface {
-	GetTaskByMaxID(ctx context.Context, maxID string) (*domain.Task, error)
+	GetTaskByID(ctx context.Context, id string) (*domain.Task, error)
 	GetTasks(ctx context.Context, opts ...sql.GetTasksOption) ([]*domain.Task, int, error)
 	CountTasks(ctx context.Context, opts ...sql.GetTasksOption) (int, error)
 	CreateTask(ctx context.Context, task *domain.Task) (*domain.Task, error)

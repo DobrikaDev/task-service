@@ -7,7 +7,7 @@ option go_package = "DobrikaDev/task-service/internal/generated/proto/task";
 service TaskService {
     rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
     rpc GetTasks(GetTasksRequest) returns (GetTasksResponse);
-    rpc GetTaskByMaxID(GetTaskByMaxIDRequest) returns (GetTaskByMaxIDResponse);
+    rpc GetTaskByID(GetTaskByIDRequest) returns (GetTaskByIDResponse);
     rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
     rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
 
@@ -91,7 +91,7 @@ message CreateTaskRequest {
     Task Task = 1;
 }
 message GetTasksRequest {
-    string max_id = 1;
+    string customer_id = 1;
     int32 limit = 2;
     int32 offset = 3;
 }
@@ -102,11 +102,11 @@ message GetTasksResponse {
     Error error = 3;
 }
 
-message GetTaskByMaxIDRequest {
-    string max_id = 1;
+message GetTaskByIDRequest {
+    string id = 1;
 }
 
-message GetTaskByMaxIDResponse {
+message GetTaskByIDResponse {
     Task Task = 1;
     Error error = 2;
 }

@@ -78,10 +78,6 @@ func WithTaskID(id string) GetTasksOption {
 	}
 }
 
-func WithTaskMaxID(maxID string) GetTasksOption {
-	return WithTaskID(maxID)
-}
-
 func WithTaskIDs(ids []string) GetTasksOption {
 	return taskOptionFunc{
 		selectFn: func(sb sq.SelectBuilder) sq.SelectBuilder {
