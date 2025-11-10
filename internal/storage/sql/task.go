@@ -275,10 +275,6 @@ func (s *SqlStorage) GetTaskByID(ctx context.Context, id string) (*domain.Task, 
 	return &task, nil
 }
 
-func (s *SqlStorage) GetTaskByMaxID(ctx context.Context, maxID string) (*domain.Task, error) {
-	return s.GetTaskByID(ctx, maxID)
-}
-
 func (s *SqlStorage) GetTasks(ctx context.Context, opts ...GetTasksOption) ([]*domain.Task, int, error) {
 	sb := sq.Select(taskSelectColumns...).
 		From(fmt.Sprintf("%s t", taskTableName)).

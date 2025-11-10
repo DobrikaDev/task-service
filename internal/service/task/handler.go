@@ -66,13 +66,13 @@ func (s *TaskService) UpdateTask(ctx context.Context, task *domain.Task) (*domai
 	return task, nil
 }
 
-func (s *TaskService) DeleteTask(ctx context.Context, maxID string) error {
-	err := s.storage.DeleteTask(ctx, maxID)
+func (s *TaskService) DeleteTask(ctx context.Context, id string) error {
+	err := s.storage.DeleteTask(ctx, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrTaskNotFound) {
 			return ErrTaskNotFound
 		}
-		s.logger.Error("failed to delete task", zap.Error(err), zap.String("max_id", maxID))
+		s.logger.Error("failed to delete task", zap.Error(err), zap.String("id", id))
 		return ErrTaskInternal
 	}
 	return nil

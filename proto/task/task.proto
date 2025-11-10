@@ -120,11 +120,11 @@ message UpdateTaskResponse {
 }
 
 message DeleteTaskRequest {
-    string max_id = 1;
+    string id = 1;
 }
 
 message DeleteTaskResponse {
-    string max_id = 1;
+    string id = 1;
     Error error = 2;
 }
 

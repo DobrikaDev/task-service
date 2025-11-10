@@ -1134,7 +1134,7 @@ func (x *UpdateTaskResponse) GetError() *Error {
 
 type DeleteTaskRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MaxId         string                 `protobuf:"bytes,1,opt,name=max_id,json=maxId,proto3" json:"max_id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1169,16 +1169,16 @@ func (*DeleteTaskRequest) Descriptor() ([]byte, []int) {
 	return file_proto_task_task_proto_rawDescGZIP(), []int{19}
 }
 
-func (x *DeleteTaskRequest) GetMaxId() string {
+func (x *DeleteTaskRequest) GetId() string {
 	if x != nil {
-		return x.MaxId
+		return x.Id
 	}
 	return ""
 }
 
 type DeleteTaskResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MaxId         string                 `protobuf:"bytes,1,opt,name=max_id,json=maxId,proto3" json:"max_id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Error         *Error                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1214,9 +1214,9 @@ func (*DeleteTaskResponse) Descriptor() ([]byte, []int) {
 	return file_proto_task_task_proto_rawDescGZIP(), []int{20}
 }
 
-func (x *DeleteTaskResponse) GetMaxId() string {
+func (x *DeleteTaskResponse) GetId() string {
 	if x != nil {
-		return x.MaxId
+		return x.Id
 	}
 	return ""
 }
@@ -1406,11 +1406,11 @@ const file_proto_task_task_proto_rawDesc = "" +
 	"\x12UpdateTaskResponse\x12\x1e\n" +
 	"\x04Task\x18\x01 \x01(\v2\n" +
 	".task.TaskR\x04Task\x12!\n" +
-	"\x05error\x18\x02 \x01(\v2\v.task.ErrorR\x05error\"*\n" +
-	"\x11DeleteTaskRequest\x12\x15\n" +
-	"\x06max_id\x18\x01 \x01(\tR\x05maxId\"N\n" +
-	"\x12DeleteTaskResponse\x12\x15\n" +
-	"\x06max_id\x18\x01 \x01(\tR\x05maxId\x12!\n" +
+	"\x05error\x18\x02 \x01(\v2\v.task.ErrorR\x05error\"#\n" +
+	"\x11DeleteTaskRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"G\n" +
+	"\x12DeleteTaskResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\x05error\x18\x02 \x01(\v2\v.task.ErrorR\x05error\"W\n" +
 	"\x12CreateTaskResponse\x12\x1e\n" +
 	"\x04Task\x18\x01 \x01(\v2\n" +

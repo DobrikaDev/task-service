@@ -156,23 +156,23 @@ func (s *Server) UpdateTask(ctx context.Context, req *taskpb.UpdateTaskRequest) 
 }
 
 func (s *Server) DeleteTask(ctx context.Context, req *taskpb.DeleteTaskRequest) (*taskpb.DeleteTaskResponse, error) {
-	if req.GetMaxId() == "" {
+	if req.GetId() == "" {
 		return &taskpb.DeleteTaskResponse{
-			Error: validationError("max id is required"),
+			Error: validationError("id is required"),
 		}, nil
 	}
 
-	err := s.taskService.DeleteTask(ctx, req.GetMaxId())
+	err := s.taskService.DeleteTask(ctx, req.GetId())
 	if err != nil {
 		return &taskpb.DeleteTaskResponse{
 			Error: convertErrorToProto(err),
 		}, nil
 	}
 
-	s.logger.Info("task deleted", zap.String("task_id", req.GetMaxId()))
+	s.logger.Info("task deleted", zap.String("task_id", req.GetId()))
 
 	return &taskpb.DeleteTaskResponse{
-		MaxId: req.GetMaxId(),
+		Id: req.GetId(),
 	}, nil
 }
 
