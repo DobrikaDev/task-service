@@ -4,12 +4,13 @@ import (
 	"DobrikaDev/task-service/internal/domain"
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgconn"
 	"go.uber.org/zap"
 )
 
@@ -27,7 +28,7 @@ var taskSelectColumns = []string{
 	"t.verification_type",
 	"t.cost",
 	"t.members_count",
-	"t.meta",
+	"COALESCE(t.meta, '{}'::jsonb) AS meta",
 	"t.created_at",
 	"t.updated_at",
 }
@@ -351,9 +352,9 @@ func (s *SqlStorage) CreateTask(ctx context.Context, task *domain.Task) (*domain
 			task.VerificationType,
 			task.Cost,
 			task.MembersCount,
-			task.Meta,
+			normalizeTaskMeta(task.Meta),
 		).
-		Suffix("RETURNING id, customer_id, name, description, verification_type, cost, members_count, meta, created_at, updated_at").
+		Suffix("RETURNING id, customer_id, name, description, verification_type, cost, members_count, COALESCE(meta, '{}'::jsonb) AS meta, created_at, updated_at").
 		PlaceholderFormat(sq.Dollar).
 		MustSql()
 
@@ -369,7 +370,7 @@ func (s *SqlStorage) CreateTask(ctx context.Context, task *domain.Task) (*domain
 				return nil, ErrTaskInvalid
 			}
 		}
-		s.logger.Error("failed to create task", zap.Error(err), zap.String("task_id", task.ID))
+		s.logger.Error("failed to create task", zap.Error(err), zap.String("task_id", id))
 		return nil, ErrTaskInternal
 	}
 
@@ -383,10 +384,10 @@ func (s *SqlStorage) UpdateTask(ctx context.Context, task *domain.Task) (*domain
 		Set("verification_type", task.VerificationType).
 		Set("cost", task.Cost).
 		Set("members_count", task.MembersCount).
-		Set("meta", task.Meta).
+		Set("meta", normalizeTaskMeta(task.Meta)).
 		Set("updated_at", sq.Expr("NOW()")).
 		Where(sq.Eq{"id": task.ID}).
-		Suffix("RETURNING id, customer_id, name, description, verification_type, cost, members_count, meta, created_at, updated_at").
+		Suffix("RETURNING id, customer_id, name, description, verification_type, cost, members_count, COALESCE(meta, '{}'::jsonb) AS meta, created_at, updated_at").
 		PlaceholderFormat(sq.Dollar).
 		MustSql()
 
@@ -432,4 +433,12 @@ func (s *SqlStorage) DeleteTask(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+func normalizeTaskMeta(meta json.RawMessage) interface{} {
+	if len(meta) == 0 || string(meta) == "null" {
+		return sq.Expr("'{}'::jsonb")
+	}
+
+	return meta
 }
