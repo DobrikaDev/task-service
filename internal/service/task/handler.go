@@ -84,7 +84,17 @@ func (s *TaskService) UserJoinTask(ctx context.Context, userID, taskID string) (
 		TaskID: taskID,
 		Status: domain.StatusInProgress,
 	}
-	userTask, err := s.storage.CreateUserTask(ctx, userTask)
+
+	task, err := s.GetTaskByID(ctx, taskID)
+	if err != nil {
+		return nil, err
+	}
+
+	if task.CustomerID != userID {
+		return nil, ErrUserTaskInvalid
+	}
+
+	userTask, err = s.storage.CreateUserTask(ctx, userTask)
 	if err != nil {
 		if errors.Is(err, sql.ErrUserTaskAlreadyExists) {
 			return nil, ErrUserTaskAlreadyExists

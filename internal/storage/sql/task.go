@@ -9,6 +9,7 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -330,6 +331,7 @@ func (s *SqlStorage) CountTasks(ctx context.Context, opts ...GetTasksOption) (in
 }
 
 func (s *SqlStorage) CreateTask(ctx context.Context, task *domain.Task) (*domain.Task, error) {
+	id := uuid.NewString()
 	query, args := sq.Insert(taskTableName).
 		Columns(
 			"id",
@@ -342,7 +344,7 @@ func (s *SqlStorage) CreateTask(ctx context.Context, task *domain.Task) (*domain
 			"meta",
 		).
 		Values(
-			task.ID,
+			id,
 			task.CustomerID,
 			task.Name,
 			task.Description,

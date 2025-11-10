@@ -21,12 +21,6 @@ func (s *Server) CreateTask(ctx context.Context, req *taskpb.CreateTaskRequest) 
 
 	payload := req.GetTask()
 
-	if payload.Id == "" {
-		return &taskpb.CreateTaskResponse{
-			Error: validationError("id is required"),
-		}, nil
-	}
-
 	if payload.CustomerId == "" {
 		return &taskpb.CreateTaskResponse{
 			Error: validationError("customer id is required"),
