@@ -85,11 +85,6 @@ func (s *Server) GetTasks(ctx context.Context, req *taskpb.GetTasksRequest) (*ta
 
 func (s *Server) SearchTasks(ctx context.Context, req *taskpb.SearchTasksRequest) (*taskpb.SearchTasksResponse, error) {
 	query := strings.TrimSpace(req.GetQuery())
-	if query == "" {
-		return &taskpb.SearchTasksResponse{
-			Error: validationError("query is required"),
-		}, nil
-	}
 
 	tasks, err := s.taskService.SearchTasks(ctx, task.SearchOptions{
 		Query:     query,

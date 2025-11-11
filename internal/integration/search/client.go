@@ -162,3 +162,4 @@ func (c *Client) doRequest(ctx context.Context, timeout time.Duration, endpoint 
 
 	return nil
 }
+

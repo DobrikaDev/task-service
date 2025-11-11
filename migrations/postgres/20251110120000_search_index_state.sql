@@ -11,3 +11,4 @@ CREATE TABLE IF NOT EXISTS search_index_state (
 DROP TABLE IF EXISTS search_index_state;
 -- +goose StatementEnd
 
+
